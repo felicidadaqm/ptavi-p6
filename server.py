@@ -14,17 +14,6 @@ class EchoHandler(socketserver.DatagramRequestHandler):
     Echo server class
     """
 
-    try:
-        IP = sys.argv[1]
-        port = int(sys.argv[2])
-        if os.path.exists(sys.argv[3]):
-            audio = sys.argv[3]
-        else:
-            print("Usage: python3 server.py IP port audio_file")
-            sys.exit()
-    except IndexError:
-        print("Usage: python3 server.py IP port audio_file")
-
     def handle(self):
         for line in self.rfile:
             print("El cliente nos manda " + line.decode('utf-8'))
@@ -41,8 +30,22 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             elif request [0] != 'INVITE' and request[0] != 'BYE' and request[0] != 'ACK':
                 self.wfile.write(b'SIP/2.0 405 Method Not Allowed')
 
+            if request[2] != 'SIP/2.0\r\n':
+                self.wfile.write(b'SIP/2.0 400 Bad Request')
+
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
-    serv = socketserver.UDPServer(('', 6002), EchoHandler)
+    try:
+        IP = sys.argv[1]
+        port = int(sys.argv[2])
+        if os.path.exists(sys.argv[3]):
+            audio = sys.argv[3]
+        else:
+            print("Usage: python3 server.py IP port audio_file")
+            sys.exit()
+    except IndexError:
+        print("Usage: python3 server.py IP port audio_file")
+
+    serv = socketserver.UDPServer(('', port), EchoHandler)
     print("Listening...")
     serv.serve_forever()
