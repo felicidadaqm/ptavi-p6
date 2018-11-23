@@ -13,16 +13,14 @@ try:
     receiver = sys.argv[2][0:sys.argv[2].find('@')]
     IP = sys.argv[2][sys.argv[2].find('@')+1:sys.argv[2].find(':')]
     port = int(sys.argv[2][sys.argv[2].rfind(':')+1::])
-    print(method, receiver, IP, port)
 except IndexError:
     print("Usage: python3 client.py method receiver@IP:SIPport")
 
 
-#if method == 'INVITE' or method == 'BYE':
-#    message = method + " sip:" + receiver + "@" + IP + " SIP/2.0"
-#    print(message)
-#else:
+#if method != 'INVITE' or method != 'BYE':
+#   print(method)
 #    print("Petición inválida")
+#    sys.exit()
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
@@ -41,6 +39,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         received = data.decode('utf-8').split()
         if '100' in received and '180' in received and '200' in received:
             message2 =  'ACK' + " sip:" + receiver + "@" + IP + " SIP/2.0"
-            print("meh")
             my_socket.send(bytes(message2, 'utf-8') + b'\r\n')
 print("Fin.")
