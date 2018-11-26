@@ -16,6 +16,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
     """
 
     def handle(self):
+    
         for line in self.rfile:
             print("El cliente nos manda " + line.decode('utf-8'))
 
@@ -27,7 +28,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             if request[2] != 'SIP/2.0\r\n':
                 self.wfile.write(b'SIP/2.0 400 Bad Request')
             elif request[0] == 'INVITE':
-                self.wfile.write(b'SIP/2.0 100 Trying ' + b'SIP/2.0 180 Ringing ' + b'SIP/2.0 200 OK ')
+                self.wfile.write(b'SIP/2.0 100 Trying' + b'SIP/2.0 180 Ringing' + b'SIP/2.0 200 OK')
             elif request[0] == 'BYE':
                 self.wfile.write(b'SIP/2.0 200 OK')
             elif request[0] == 'ACK':
@@ -36,7 +37,6 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 os.system(aEjecutar)
             elif request [0] != 'INVITE' and request[0] != 'BYE' and request[0] != 'ACK':
                 self.wfile.write(b'SIP/2.0 405 Method Not Allowed')
-
 
 
 if __name__ == "__main__":

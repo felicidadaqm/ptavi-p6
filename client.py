@@ -30,14 +30,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
     print("Terminando socket...")
 
     if data.decode('utf-8') != '':
-        received = data.decode('utf-8').split()
+        received = data.decode('utf-8')
         print(received)
-        print(received[1] + received[4] + received[7])
-        if 'Trying' in received:
-            if 'Ringing' in received:
-                if 'OK' in received:
-                    message2 =  'ACK' + " sip:" + receiver + "@" + IP + " SIP/2.0"
-                    print("Enviando " + message2)
-                    my_socket.send(bytes(message2, 'utf-8') + b'\r\n')
+        if 'Trying' in received and 'Ringing' in received and 'OK' in received:
+            message2 =  'ACK' + " sip:" + receiver + "@" + IP + " SIP/2.0"
+            print("Enviando " + message2)
+            my_socket.send(bytes(message2, 'utf-8') + b'\r\n')
 
 print("Fin.")
