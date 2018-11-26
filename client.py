@@ -16,12 +16,6 @@ try:
 except IndexError:
     print("Usage: python3 client.py method receiver@IP:SIPport")
 
-
-#if method != 'INVITE' or method != 'BYE':
-#   print(method)
-#    print("Petición inválida")
-#    sys.exit()
-
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
     my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -37,7 +31,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
 
     if data.decode('utf-8') != '':
         received = data.decode('utf-8').split()
-        if '100' in received and '180' in received and '200' in received:
-            message2 =  'ACK' + " sip:" + receiver + "@" + IP + " SIP/2.0"
-            my_socket.send(bytes(message2, 'utf-8') + b'\r\n')
+        print(received)
+        print(received[1] + received[4] + received[7])
+        if 'Trying' in received:
+            if 'Ringing' in received:
+                if 'OK' in received:
+                    message2 =  'ACK' + " sip:" + receiver + "@" + IP + " SIP/2.0"
+                    print("Enviando " + message2)
+                    my_socket.send(bytes(message2, 'utf-8') + b'\r\n')
+
 print("Fin.")

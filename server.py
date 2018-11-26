@@ -19,10 +19,10 @@ class EchoHandler(socketserver.DatagramRequestHandler):
         for line in self.rfile:
             print("El cliente nos manda " + line.decode('utf-8'))
 
-            if line.decode('utf-8') == '\r\n':
-                continue
+            if line.decode('utf-8') == '\r\n' or not line:
+               continue
             else:
-                request = line.decode('utf-8').split(" ")
+               request = line.decode('utf-8').split(" ")
 
             if request[2] != 'SIP/2.0\r\n':
                 self.wfile.write(b'SIP/2.0 400 Bad Request')
@@ -32,6 +32,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 self.wfile.write(b'SIP/2.0 200 OK')
             elif request[0] == 'ACK':
                 aEjecutar = 'mp32rtp -i 127.0.0.1 -p 23032 < ' + audio
+                print("Vamos a ejecutar: " + aEjecutar)
                 os.system(aEjecutar)
             elif request [0] != 'INVITE' and request[0] != 'BYE' and request[0] != 'ACK':
                 self.wfile.write(b'SIP/2.0 405 Method Not Allowed')
