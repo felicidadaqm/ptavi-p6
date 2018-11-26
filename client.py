@@ -33,7 +33,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         received = data.decode('utf-8')
         print(received)
         if 'Trying' in received and 'Ringing' in received and 'OK' in received:
-            message2 =  'ACK' + " sip:" + receiver + "@" + IP + " SIP/2.0"
+            message2 = 'ACK' + " sip:" + receiver + "@" + IP + " SIP/2.0"
             print("Enviando " + message2)
             my_socket.send(bytes(message2, 'utf-8') + b'\r\n')
 

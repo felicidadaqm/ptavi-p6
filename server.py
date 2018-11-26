@@ -16,31 +16,40 @@ class EchoHandler(socketserver.DatagramRequestHandler):
     """
 
     def handle(self):
-    
+        """
+        Defined different responses
+        to different requests from client
+        """
+
         for line in self.rfile:
             print("El cliente nos manda " + line.decode('utf-8'))
 
             if line.decode('utf-8') == '\r\n' or not line:
-               continue
+                continue
             else:
-               request = line.decode('utf-8').split(" ")
+                request = line.decode('utf-8').split(" ")
 
             if request[2] != 'SIP/2.0\r\n':
                 self.wfile.write(b'SIP/2.0 400 Bad Request')
             elif request[0] == 'INVITE':
-                self.wfile.write(b'SIP/2.0 100 Trying' + b'SIP/2.0 180 Ringing' + b'SIP/2.0 200 OK')
+                RESPONSE = 'SIP/2.0 100 Trying ' + 'SIP/2.0 180 Ringing '
+                RESPONSE += 'SIP/2.0 200 OK'
+                self.wfile.write(bytes(RESPONSE, 'utf-8'))
             elif request[0] == 'BYE':
                 self.wfile.write(b'SIP/2.0 200 OK')
             elif request[0] == 'ACK':
                 aEjecutar = 'mp32rtp -i 127.0.0.1 -p 23032 < ' + audio
                 print("Vamos a ejecutar: " + aEjecutar)
                 os.system(aEjecutar)
-            elif request [0] != 'INVITE' and request[0] != 'BYE' and request[0] != 'ACK':
+            elif request[0] != ('INVITE' and 'BYE' and 'ACK'):
                 self.wfile.write(b'SIP/2.0 405 Method Not Allowed')
+                print("Hemos recibido una petición inválida")
 
 
 if __name__ == "__main__":
-    # Creamos servidor de eco y escuchamos
+    """
+    Echo server is created
+    """
     try:
         IP = sys.argv[1]
         port = int(sys.argv[2])
