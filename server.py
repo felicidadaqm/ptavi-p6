@@ -43,7 +43,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 os.system(aEjecutar)
             elif request[0] != ('INVITE' and 'BYE' and 'ACK'):
                 self.wfile.write(b'SIP/2.0 405 Method Not Allowed')
-                print("Hemos recibido una petición inválida")
+                print("Hemos recibido una petición inválida.")
 
 
 if __name__ == "__main__":
