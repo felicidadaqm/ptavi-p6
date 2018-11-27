@@ -56,10 +56,9 @@ if __name__ == "__main__":
         if os.path.exists(sys.argv[3]):
             audio = sys.argv[3]
         else:
-            print("Usage: python3 server.py IP port audio_file")
-            sys.exit()
+            sys.exit("Usage: python3 server.py IP port audio_file")
     except IndexError:
-        print("Usage: python3 server.py IP port audio_file")
+        sys.exit("Usage: python3 server.py IP port audio_file")
 
     serv = socketserver.UDPServer(('', port), EchoHandler)
     print("Listening...")

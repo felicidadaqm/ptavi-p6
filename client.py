@@ -8,13 +8,17 @@ import socket
 import sys
 
 
+if len(sys.argv) != 3:
+    sys.exit("Usage: client.py metodo receptor@IPreceptor:puertoSIP")
+
 try:
     method = sys.argv[1]
     receiver = sys.argv[2][0:sys.argv[2].find('@')]
     IP = sys.argv[2][sys.argv[2].find('@')+1:sys.argv[2].find(':')]
     port = int(sys.argv[2][sys.argv[2].rfind(':')+1::])
-except IndexError:
-    print("Usage: python3 client.py method receiver@IP:SIPport")
+except (IndexError, ValueError, NameError):
+    sys.exit("Usage: python3 client.py method receiver@IP:SIPport")
+
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
